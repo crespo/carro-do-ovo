@@ -1,3 +1,4 @@
+import EggDetailScreen from '@/screens/EggDetailScreen';
 import LoginScreen from '@/screens/LoginScreen';
 import SelectEggsScreen from '@/screens/SelectEggsScreen';
 import SignUpScreen from '@/screens/SignUpScreen';
@@ -34,12 +35,13 @@ export default function Index() {
             }}
         >
             <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="SignUp" component={SignUpScreen} />
             <Stack.Screen
                 name="Home"
                 component={SelectEggsScreen}
                 options={{ headerBackVisible: false }}
             />
-            <Stack.Screen name="SignUp" component={SignUpScreen} />
+            <Stack.Screen name="EggDetail" component={EggDetailScreen} />
         </Stack.Navigator>
     );
 }

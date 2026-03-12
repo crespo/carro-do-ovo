@@ -1,5 +1,6 @@
+import EggsList from '@/components/EggList/EggsList';
+import { EGGS } from '@/data/dummy-data';
 import { useLayoutEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
 
 export default function SelectEggsScreen({ navigation }: any) {
     useLayoutEffect(() => {
@@ -8,14 +9,7 @@ export default function SelectEggsScreen({ navigation }: any) {
         });
     });
 
-    return <View style={styles.rootContainer}></View>;
-}
+    const eggs = EGGS;
 
-const styles = StyleSheet.create({
-    rootContainer: {
-        flex: 1,
-        alignItems: 'center',
-        marginTop: 80,
-        marginHorizontal: 16,
-    },
-});
+    return <EggsList items={eggs} />;
+}

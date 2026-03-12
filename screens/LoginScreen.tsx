@@ -15,10 +15,11 @@ import {
 } from 'react-native';
 
 export default function LoginScreen({ navigation }: any) {
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
-    console.log(password);
+    console.log(username, ' - ', password);
 
     function loginButtonHandler() {
         navigation.navigate('Home');
@@ -47,6 +48,7 @@ export default function LoginScreen({ navigation }: any) {
                                 autoComplete="email"
                                 inputMode="email"
                                 placeholder="raul@ovo.tech"
+                                onChangeText={(text: any) => setUsername(text)}
                             />
                         </FormInput>
 
