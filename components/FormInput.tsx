@@ -3,19 +3,25 @@ import Label from './Label';
 
 export default function FormInput({ children, label }: any) {
     return (
-        <>
+        <View style={styles.rootContainer}>
             <Label>{label}</Label>
+
             <View style={styles.inputContainer}>{children}</View>
-        </>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
+    rootContainer: {
+        gap: 8,
+        alignItems: 'flex-start',
+    },
     inputContainer: {
         width: '100%',
-        padding: 8,
+        paddingVertical: 4,
+        paddingHorizontal: 16,
         borderWidth: 2,
-        borderRadius: 8,
+        borderRadius: 29,
         backgroundColor: '#dbd3c5',
         borderRightColor: '#9b8f78',
         borderBottomColor: '#9b8f78',

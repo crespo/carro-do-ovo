@@ -1,15 +1,20 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-export default function Button({ children, fontSize, onPress, color }: any) {
+export default function Button({ children, onPress, color }: any) {
     return (
-        <Pressable onPress={onPress} style={({ pressed }) => pressed && styles.pressed}>
+        <Pressable
+            onPress={onPress}
+            style={({ pressed }) => (pressed ? styles.pressed : styles.notPressed)}
+        >
             <View
                 style={[
                     styles.rootContainer,
                     color === 'secondary' ? styles.colorSecondary : styles.colorPrimary,
                 ]}
             >
-                <Text style={[styles.title, { fontSize: fontSize }]}>{children}</Text>
+                <Text style={color === 'secondary' ? styles.titleSecondary : styles.titlePrimary}>
+                    {children}
+                </Text>
             </View>
         </Pressable>
     );
@@ -18,33 +23,43 @@ export default function Button({ children, fontSize, onPress, color }: any) {
 const styles = StyleSheet.create({
     rootContainer: {
         width: '100%',
-        height: 50,
-        paddingHorizontal: 16,
-        paddingVertical: 12,
+        height: 45,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 8,
-        borderWidth: 2,
+        borderRadius: 22,
+        borderWidth: 5,
     },
     colorPrimary: {
-        backgroundColor: '#9b8f78',
-        borderRightColor: '#c9bca4',
-        borderBottomColor: '#c9bca4',
-        borderLeftColor: '#9b8f78',
-        borderTopColor: '#9b8f78',
+        backgroundColor: '#fcb101',
+        borderRightColor: '#9d4901',
+        borderBottomColor: '#9d4901',
+        borderLeftColor: '#feec7a',
+        borderTopColor: '#feec7a',
     },
     colorSecondary: {
-        backgroundColor: '#ceb88e',
-        borderRightColor: '#9b8f78',
-        borderBottomColor: '#9b8f78',
-        borderLeftColor: '#c9bca4',
-        borderTopColor: '#c9bca4',
+        backgroundColor: '#fdeed2',
+        borderRightColor: '#d8a67d',
+        borderBottomColor: '#d8a67d',
+        borderLeftColor: '#fdf8e6',
+        borderTopColor: '#fdf8e6',
     },
-    title: {
-        fontWeight: 'bold',
-        color: 'white',
+    titlePrimary: {
+        fontFamily: 'fredoka',
+        color: '#fbf7f1',
+        fontSize: 24,
+        letterSpacing: 1,
+    },
+    titleSecondary: {
+        fontFamily: 'fredoka',
+        color: '#622c18',
+        fontSize: 24,
+        letterSpacing: 1,
     },
     pressed: {
-        opacity: 0.8,
+        flex: 1,
+        opacity: 0.6,
+    },
+    notPressed: {
+        flex: 1,
     },
 });

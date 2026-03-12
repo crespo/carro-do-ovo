@@ -6,14 +6,15 @@ export default function Card({ children }: any) {
 
 const styles = StyleSheet.create({
     card: {
-        marginHorizontal: 32,
+        width: '100%',
         padding: 16,
-        gap: 8,
+        gap: 12,
         borderWidth: 3,
         borderRadius: 8,
-        borderRightColor: '#9b8f78',
-        borderBottomColor: '#9b8f78',
-        borderLeftColor: '#c9bca4',
-        borderTopColor: '#c9bca4',
+        backgroundColor: '#fdf1dd',
+        borderRightColor: '#c49878',
+        borderBottomColor: '#c49878',
+        borderLeftColor: '#e3b998',
+        borderTopColor: '#e3b998',
     },
 });
