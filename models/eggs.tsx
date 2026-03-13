@@ -5,5 +5,6 @@ export default class Egg {
         public price: any,
         public vendor: any,
         public vendorRating: any,
+        public imageUrl: any
     ) {}
 }
