@@ -1,7 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '@/constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import PressableCard from '../PressableCard';
+import RatingLabel from '../RatingLabel';
 
 export default function EggItem({ id, name, vendor, vendorRating, price, imageUrl }: any) {
     const navigation: any = useNavigation();
@@ -17,28 +18,27 @@ export default function EggItem({ id, name, vendor, vendorRating, price, imageUr
             style={[
                 styles.rootContainer,
                 {
-                    aspectRatio: 1.3,
+                    aspectRatio: 0.88,
                     flexGrow: 1,
                     width: '50%',
                     position: 'relative',
-                    paddingHorizontal: 8,
+                    paddingHorizontal: 4,
                 },
             ]}
         >
             <PressableCard onPress={selectEggHandler}>
                 <View style={styles.innerContainer}>
                     <Image source={{ uri: imageUrl }} style={styles.image} />
-                    <Text>
-                        <Text style={styles.price}>R$ {price.toFixed(2)}</Text>/bandeja
-                    </Text>
-                    <Text style={styles.title} numberOfLines={1}>
-                        {name}
-                    </Text>
-                    <View style={styles.infoContainer}>
-                        <Text style={styles.vendor}>{vendor}</Text>
-                        <View style={styles.ratingContainer}>
-                            <Ionicons name="star" size={12} color={'#fcb101'} />
-                            <Text style={styles.rating}>{vendorRating}</Text>
+                    <View style={styles.subContainer}>
+                        <Text style={styles.color}>
+                            <Text style={styles.price}>R$ {price.toFixed(2)}</Text> / bandeja
+                        </Text>
+                        <Text style={[styles.title, styles.color]} numberOfLines={1}>
+                            {name}
+                        </Text>
+                        <View style={styles.infoContainer}>
+                            <Text style={[styles.vendor, styles.color]}>{vendor}</Text>
+                            <RatingLabel vendorRating={vendorRating} />
                         </View>
                     </View>
                 </View>
@@ -52,23 +52,24 @@ const styles = StyleSheet.create({
         width: '50%',
     },
     image: {
-        width: 50,
-        height: 50,
+        width: '100%',
+        height: 120,
+    },
+    subContainer: {
+        marginHorizontal: 10,
+        gap: 3,
     },
     innerContainer: {
         gap: 3,
     },
+    infoContainer: {
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        gap: 6,
+        alignItems: 'center',
+    },
     vendor: {
         fontFamily: 'inter',
-        fontSize: 12,
-    },
-
-    ratingContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 3,
-    },
-    rating: {
         fontSize: 12,
     },
     price: {
@@ -76,14 +77,13 @@ const styles = StyleSheet.create({
         fontSize: 17,
         letterSpacing: 1,
     },
-    infoContainer: {
-        flexDirection: 'row',
-        gap: 6,
-        alignItems: 'center',
-    },
+
     title: {
         fontFamily: 'fredoka',
         fontSize: 12,
         letterSpacing: 1,
+    },
+    color: {
+        color: Colors.primary500,
     },
 });

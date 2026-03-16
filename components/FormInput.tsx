@@ -1,3 +1,4 @@
+import { Colors } from '@/constants/colors';
 import { StyleSheet, View } from 'react-native';
 import Label from './Label';
 
@@ -22,12 +23,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         borderWidth: 2,
         borderRadius: 29,
-        backgroundColor: '#dbd3c5',
-        borderRightColor: '#9b8f78',
-        borderBottomColor: '#9b8f78',
-        borderLeftColor: '#c9bca4',
-        borderTopColor: '#c9bca4',
+        backgroundColor: Colors.secondary500,
+        borderLeftColor: Colors.secondary600,
+        borderTopColor: Colors.secondary600,
+        borderRightColor: Colors.secondary800,
+        borderBottomColor: Colors.secondary800,
         gap: 2,
-        color: 'white',
     },
 });

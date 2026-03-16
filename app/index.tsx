@@ -1,3 +1,4 @@
+import { Colors } from '@/constants/colors';
 import EggDetailScreen from '@/screens/EggDetailScreen';
 import LoginScreen from '@/screens/LoginScreen';
 import SelectEggsScreen from '@/screens/SelectEggsScreen';
@@ -29,9 +30,9 @@ export default function Index() {
     return (
         <Stack.Navigator
             screenOptions={{
-                headerStyle: { backgroundColor: '#854413' },
-                headerTintColor: '#f8ecdc',
-                contentStyle: { backgroundColor: '#fcf3e3' },
+                headerStyle: { backgroundColor: Colors.primary500 },
+                headerTintColor: Colors.lightText,
+                contentStyle: { backgroundColor: Colors.backgroundColorInner },
             }}
         >
             <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />

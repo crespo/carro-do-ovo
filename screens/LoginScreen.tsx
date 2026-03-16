@@ -19,8 +19,6 @@ export default function LoginScreen({ navigation }: any) {
     const [password, setPassword] = useState('');
     const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
-    console.log(username, ' - ', password);
-
     function loginButtonHandler() {
         navigation.navigate('Home');
     }

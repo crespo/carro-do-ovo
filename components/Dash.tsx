@@ -1,3 +1,4 @@
+import { Colors } from '@/constants/colors';
 import { StyleSheet, View } from 'react-native';
 
 export default function Dash() {
@@ -9,7 +10,7 @@ const styles = StyleSheet.create({
         height: 0,
         borderBottomWidth: 3,
         borderStyle: 'dashed',
-        borderColor: '#dbb392',
+        borderColor: Colors.secondaryAccent800,
         width: '100%',
     },
 });

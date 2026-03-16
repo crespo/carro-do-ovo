@@ -1,3 +1,4 @@
+import { Colors } from '@/constants/colors';
 import { StyleSheet, Text, View } from 'react-native';
 import Dash from './Dash';
 
@@ -26,17 +27,17 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
         borderRadius: 29,
         borderWidth: 3,
-        backgroundColor: '#91552d',
-        borderRightColor: '#3b1b0e',
-        borderBottomColor: '#3b1b0e',
-        borderLeftColor: '#7c3417',
-        borderTopColor: '#7c3417',
+        backgroundColor: Colors.primary500,
+        borderLeftColor: Colors.primary600,
+        borderTopColor: Colors.primary600,
+        borderRightColor: Colors.primary800,
+        borderBottomColor: Colors.primary800,
     },
     label: {
         textAlign: 'center',
         fontFamily: 'fredoka',
         letterSpacing: 1,
         fontSize: 18,
-        color: '#fbf7f1',
+        color: Colors.lightText,
     },
 });

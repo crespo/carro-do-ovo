@@ -1,3 +1,4 @@
+import { Colors } from '@/constants/colors';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 export default function PressableCard({ children, onPress }: any) {
@@ -14,19 +15,20 @@ export default function PressableCard({ children, onPress }: any) {
 const styles = StyleSheet.create({
     card: {
         width: '100%',
-        padding: 16,
+        padding: 4,
         gap: 12,
         borderWidth: 3,
         borderRadius: 8,
-        backgroundColor: '#fdf1dd',
-        borderRightColor: '#c49878',
-        borderBottomColor: '#c49878',
-        borderLeftColor: '#e3b998',
-        borderTopColor: '#e3b998',
+        backgroundColor: Colors.secondaryAccent500,
+        borderLeftColor: Colors.secondaryAccent600,
+        borderTopColor: Colors.secondaryAccent600,
+        borderRightColor: Colors.secondaryAccent800,
+        borderBottomColor: Colors.secondaryAccent800,
+        elevation: 3,
     },
     pressed: {
         flex: 1,
-        opacity: 0.4,
+        opacity: 0.8,
     },
     notPressed: {
         flex: 1,

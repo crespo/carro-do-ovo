@@ -10,6 +10,7 @@ export default function EggsList({ items }: any) {
             price: item.price,
             vendor: item.vendor,
             vendorRating: item.vendorRating,
+            imageUrl: item.imageUrl,
         };
         return <EggItem {...eggItemProps} />;
     }
