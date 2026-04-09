@@ -8,7 +8,10 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "docker:web": "npx expo start --web --host 0.0.0.0 --port 8081",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run lint"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -17,11 +20,14 @@
     "@react-navigation/native": "^7.1.8",
     "@react-navigation/native-stack": "^7.14.5",
     "expo": "~54.0.33",
+    "expo-camera": "^55.0.15",
     "expo-constants": "~18.0.13",
     "expo-font": "~14.0.11",
     "expo-haptics": "~15.0.8",
     "expo-image": "~3.0.11",
     "expo-linking": "~8.0.11",
+    "expo-location": "^55.1.8",
+    "expo-network": "^55.0.13",
     "expo-router": "~6.0.23",
     "expo-splash-screen": "~31.0.13",
     "expo-status-bar": "~3.0.9",

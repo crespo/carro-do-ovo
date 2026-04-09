@@ -9,7 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "O aplicativo usa a camera para registrar uma foto de demonstracao do pedido.",
+        "NSLocationWhenInUseUsageDescription": "O aplicativo usa sua localizacao para mostrar a entrega atual no MVP."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,6 +23,11 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
+      "permissions": [
+        "CAMERA",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ],
       "predictiveBackGestureEnabled": false
     },
     "web": {
@@ -39,10 +48,12 @@
           }
         }
       ],
-      "expo-font"
+      "expo-font",
+      "expo-camera",
+      "expo-location"
     ],
     "experiments": {
-      "typedRoutes": true,
+      "typedRoutes": false,
       "reactCompiler": true
     }
   }

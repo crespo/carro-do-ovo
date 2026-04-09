@@ -1,0 +1,18 @@
+export const palette = {
+  cream: '#fff8ec',
+  creamStrong: '#fce9be',
+  warmSoft: '#ffd98a',
+  accent: '#f3a712',
+  accentStrong: '#d47a00',
+  primary500: '#a65c22',
+  primary700: '#7a3814',
+  primary800: '#5c260d',
+  primary900: '#3e1807',
+  borderSoft: '#efc17b',
+  borderStrong: '#9d5c1b',
+  background: '#fff3d9',
+  surface: '#fffaf0',
+  muted: '#7d5a3c',
+  success: '#2f7d32',
+  error: '#b42318',
+};
