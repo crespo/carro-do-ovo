@@ -18,10 +18,15 @@ type AppContextValue = {
     phone: string;
     password: string;
   }) => Promise<User>;
+  updateUserProfile: (payload: {
+    phone: string;
+    avatarUri: string | null;
+    defaultAddress: string;
+  }) => Promise<User>;
   logout: () => void;
   addToCart: (egg: Egg, quantity: number) => void;
   updateCartQuantity: (eggId: string, quantity: number) => void;
-  submitOrder: () => Promise<Order>;
+  submitOrder: (payload: { deliveryAddress: string; contactPhone: string }) => Promise<Order>;
 };
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -73,6 +78,24 @@ export function AppProvider({ children }: PropsWithChildren) {
     return createdUser;
   }
 
+  async function updateUserProfile(payload: {
+    phone: string;
+    avatarUri: string | null;
+    defaultAddress: string;
+  }) {
+    if (!user) {
+      throw new Error('Voce precisa entrar antes de editar o perfil.');
+    }
+
+    const updatedUser = await mockBackend.updateUser(user.id, payload);
+
+    startTransition(() => {
+      setUser(updatedUser);
+    });
+
+    return updatedUser;
+  }
+
   function logout() {
     startTransition(() => {
       setUser(null);
@@ -103,7 +126,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     );
   }
 
-  async function submitOrder() {
+  async function submitOrder(payload: { deliveryAddress: string; contactPhone: string }) {
     if (!user) {
       throw new Error('Voce precisa entrar antes de finalizar o pedido.');
     }
@@ -112,9 +135,26 @@ export function AppProvider({ children }: PropsWithChildren) {
       throw new Error('Adicione pelo menos um item ao carrinho.');
     }
 
-    const createdOrder = await mockBackend.createOrder(user.id, cart);
+    const address = payload.deliveryAddress.trim();
+    const phone = payload.contactPhone.trim();
+
+    if (!address) {
+      throw new Error('Informe o endereco de entrega antes de concluir o pedido.');
+    }
+
+    if (!phone) {
+      throw new Error('Informe um celular para contato antes de concluir o pedido.');
+    }
+
+    const createdOrder = await mockBackend.createOrder(user.id, cart, address, phone);
+    const updatedUser = await mockBackend.updateUser(user.id, {
+      phone,
+      avatarUri: user.avatarUri,
+      defaultAddress: address,
+    });
 
     startTransition(() => {
+      setUser(updatedUser);
       setOrders((current) => [createdOrder, ...current]);
       setCart([]);
     });
@@ -132,6 +172,7 @@ export function AppProvider({ children }: PropsWithChildren) {
         booting,
         login,
         signUp,
+        updateUserProfile,
         logout,
         addToCart,
         updateCartQuantity,

@@ -10,6 +10,8 @@ export type Order = {
   code: string;
   createdAt: string;
   items: CartItem[];
+  deliveryAddress: string;
+  contactPhone: string;
   subtotal: number;
   deliveryFee: number;
   total: number;

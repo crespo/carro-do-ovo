@@ -4,4 +4,6 @@ export type User = {
   lastName: string;
   email: string;
   phone: string;
+  avatarUri: string | null;
+  defaultAddress: string;
 };

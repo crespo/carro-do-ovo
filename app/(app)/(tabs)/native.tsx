@@ -1,5 +1,5 @@
-import { CameraCard } from '@/src/components/native/CameraCard';
 import { NativeFeatureCard } from '@/src/components/native/NativeFeatureCard';
+import { AppCard } from '@/src/components/ui/AppCard';
 import { PageHeader } from '@/src/components/ui/PageHeader';
 import { Screen } from '@/src/components/ui/Screen';
 import { palette } from '@/src/theme/palette';
@@ -12,39 +12,22 @@ export default function NativeRoute() {
   return (
     <Screen contentContainerStyle={styles.content}>
       <PageHeader
-        title="Recursos nativos"
-        subtitle="Camera, GPS e rede implementados com APIs reais do Expo para atender a exigencia da disciplina."
+        title="Conexao"
+        subtitle="Confira o status da sua conexao para evitar problemas no envio do pedido."
       />
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <NativeFeatureCard
-          title="GPS"
-          description="Captura latitude, longitude e endereco aproximado do ponto atual."
-          actionLabel={viewModel.locationLoading ? 'Buscando localizacao...' : 'Ler localizacao'}
-          onAction={viewModel.loadLocation}
-          disabled={viewModel.locationLoading}
-          tone="warm"
-        >
-          <View style={styles.detailBlock}>
-            <Text style={styles.detailText}>{viewModel.locationSummary}</Text>
-          </View>
-        </NativeFeatureCard>
-
-        <CameraCard
-          permissionLabel={viewModel.cameraPermissionLabel}
-          captureLabel={viewModel.cameraBusy ? 'Capturando...' : 'Capturar foto'}
-          canCapture={viewModel.canUseCamera}
-          isBusy={viewModel.cameraBusy}
-          photoUri={viewModel.photoUri}
-          cameraRef={viewModel.cameraRef}
-          onRequestPermission={viewModel.requestCameraAccess}
-          onCapture={viewModel.capturePhoto}
-        />
+        <AppCard style={styles.callout}>
+          <Text style={styles.calloutTitle}>Seu app esta pronto para o pedido</Text>
+          <Text style={styles.detailText}>Foto do perfil pela camera na tela de conta.</Text>
+          <Text style={styles.detailText}>Endereco rapido pela localizacao no checkout.</Text>
+          <Text style={styles.detailText}>Aqui voce acompanha a conexao do aparelho.</Text>
+        </AppCard>
 
         <NativeFeatureCard
-          title="Rede do aparelho"
-          description="Leitura do estado de conexao, tipo de rede, IP e modo aviao."
-          actionLabel={viewModel.networkLoading ? 'Atualizando rede...' : 'Atualizar diagnostico'}
+          title="Status da conexao"
+          description="Veja se sua internet esta pronta para finalizar pedidos."
+          actionLabel={viewModel.networkLoading ? 'Atualizando...' : 'Atualizar status'}
           onAction={viewModel.loadNetwork}
           disabled={viewModel.networkLoading}
         >
@@ -65,6 +48,14 @@ const styles = StyleSheet.create({
   scrollContent: {
     gap: 16,
     paddingBottom: 24,
+  },
+  callout: {
+    backgroundColor: palette.creamStrong,
+  },
+  calloutTitle: {
+    fontFamily: 'fredoka',
+    fontSize: 22,
+    color: palette.primary900,
   },
   detailBlock: {
     gap: 8,

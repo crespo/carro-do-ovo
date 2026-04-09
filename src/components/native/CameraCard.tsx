@@ -7,7 +7,11 @@ import { AppButton } from '../ui/AppButton';
 import { AppCard } from '../ui/AppCard';
 
 type CameraCardProps = {
+  title?: string;
+  description?: string;
   permissionLabel: string;
+  permissionActionLabel?: string;
+  placeholderLabel?: string;
   captureLabel: string;
   canCapture: boolean;
   isBusy: boolean;
@@ -18,7 +22,11 @@ type CameraCardProps = {
 };
 
 export function CameraCard({
+  title = 'Camera',
+  description = 'Atualize sua foto',
   permissionLabel,
+  permissionActionLabel = 'Liberar camera',
+  placeholderLabel = 'Liberar camera para visualizar.',
   captureLabel,
   canCapture,
   isBusy,
@@ -29,8 +37,9 @@ export function CameraCard({
 }: CameraCardProps) {
   return (
     <AppCard style={styles.card}>
-      <Text style={styles.title}>Camera</Text>
-      <Text style={styles.description}>Permissao atual: {permissionLabel}. A captura salva uma foto de teste.</Text>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.description}>{description}</Text>
+      <Text style={styles.status}>Acesso da camera: {permissionLabel}</Text>
 
       {canCapture ? (
         <CameraView ref={cameraRef} style={styles.preview} facing="back" />
@@ -38,14 +47,19 @@ export function CameraCard({
         <Image source={{ uri: photoUri }} style={styles.preview} contentFit="cover" />
       ) : (
         <View style={[styles.preview, styles.placeholder]}>
-          <Text style={styles.placeholderText}>Liberar camera para visualizar.</Text>
+          <Text style={styles.placeholderText}>{placeholderLabel}</Text>
         </View>
       )}
 
       {photoUri ? <Image source={{ uri: photoUri }} style={styles.thumbnail} contentFit="cover" /> : null}
 
       {!canCapture ? (
-        <AppButton title="Liberar camera" onPress={onRequestPermission} disabled={isBusy} variant="secondary" />
+        <AppButton
+          title={permissionActionLabel}
+          onPress={onRequestPermission}
+          disabled={isBusy}
+          variant="secondary"
+        />
       ) : null}
 
       <AppButton title={captureLabel} onPress={onCapture} disabled={!canCapture || isBusy} />
@@ -67,6 +81,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: palette.primary700,
     lineHeight: 20,
+  },
+  status: {
+    fontFamily: 'inter',
+    fontSize: 13,
+    color: palette.muted,
   },
   preview: {
     width: '100%',

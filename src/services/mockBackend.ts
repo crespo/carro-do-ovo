@@ -10,6 +10,12 @@ type SignUpPayload = {
   password: string;
 };
 
+type UpdateUserPayload = {
+  phone: string;
+  avatarUri: string | null;
+  defaultAddress: string;
+};
+
 const usersByEmail = new Map<string, User>();
 const ordersByUserId = new Map<string, Order[]>();
 
@@ -27,7 +33,13 @@ function buildUserFromEmail(email: string) {
     lastName,
     email,
     phone: '(84) 99999-9999',
+    avatarUri: null,
+    defaultAddress: 'Rua das Gemas, 120 - Centro',
   };
+}
+
+function findUserById(userId: string) {
+  return [...usersByEmail.values()].find((user) => user.id === userId) ?? null;
 }
 
 export const mockBackend = {
@@ -57,10 +69,32 @@ export const mockBackend = {
       lastName: payload.lastName.trim(),
       email: payload.email.trim().toLowerCase(),
       phone: payload.phone.trim(),
+      avatarUri: null,
+      defaultAddress: 'Rua das Gemas, 120 - Centro',
     };
 
     usersByEmail.set(user.email, user);
     return user;
+  },
+
+  async updateUser(userId: string, payload: UpdateUserPayload) {
+    await wait(350);
+
+    const currentUser = findUserById(userId);
+
+    if (!currentUser) {
+      throw new Error('Usuario nao encontrado para atualizacao.');
+    }
+
+    const updatedUser: User = {
+      ...currentUser,
+      phone: payload.phone.trim(),
+      avatarUri: payload.avatarUri,
+      defaultAddress: payload.defaultAddress.trim(),
+    };
+
+    usersByEmail.set(updatedUser.email, updatedUser);
+    return updatedUser;
   },
 
   async fetchEggs() {
@@ -73,7 +107,7 @@ export const mockBackend = {
     return ordersByUserId.get(userId) ?? [];
   },
 
-  async createOrder(userId: string, items: CartItem[]) {
+  async createOrder(userId: string, items: CartItem[], deliveryAddress: string, contactPhone: string) {
     await wait(700);
 
     const subtotal = items.reduce((sum, item) => sum + item.egg.price * item.quantity, 0);
@@ -83,6 +117,8 @@ export const mockBackend = {
       code: `PED-${String(Date.now()).slice(-5)}`,
       createdAt: new Date().toISOString(),
       items,
+      deliveryAddress: deliveryAddress.trim(),
+      contactPhone: contactPhone.trim(),
       subtotal,
       deliveryFee,
       total: subtotal + deliveryFee,

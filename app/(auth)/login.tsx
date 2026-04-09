@@ -14,15 +14,15 @@ export default function LoginRoute() {
   return (
     <Screen scrollable contentContainerStyle={styles.content}>
       <BrandHero
-        eyebrow="Entrega rapida para o bairro"
+        eyebrow="Ovos frescos na sua porta"
         title="Carro do Ovo"
-        subtitle="Seu MVP para vender bandejas, gerenciar pedidos e demonstrar um app mobile completo."
+        subtitle="Peça suas bandejas favoritas, acompanhe seus pedidos e receba em casa."
       />
 
       <AppCard>
         <View style={styles.formHeader}>
           <Text style={styles.formTitle}>Entrar</Text>
-          <Text style={styles.helper}>Use qualquer email e uma senha com pelo menos 4 caracteres.</Text>
+          <Text style={styles.helper}>Acesse sua conta para continuar suas compras.</Text>
         </View>
 
         <AppInput
@@ -30,7 +30,7 @@ export default function LoginRoute() {
           keyboardType="email-address"
           autoCapitalize="none"
           autoComplete="email"
-          placeholder="aluno@carrodoovo.com"
+          placeholder="cliente@carrodoovo.com"
           value={viewModel.form.email}
           onChangeText={(value) => viewModel.setField('email', value)}
         />
@@ -45,7 +45,7 @@ export default function LoginRoute() {
 
         {viewModel.error ? <Text style={styles.error}>{viewModel.error}</Text> : null}
 
-        <AppButton title="Entrar no aplicativo" onPress={viewModel.submit} disabled={viewModel.loading} />
+        <AppButton title="Entrar" onPress={viewModel.submit} disabled={viewModel.loading} />
 
         {viewModel.loading ? <ActivityIndicator color={palette.primary700} /> : null}
 

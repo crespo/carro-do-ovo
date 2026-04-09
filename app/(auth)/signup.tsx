@@ -15,7 +15,7 @@ export default function SignUpRoute() {
     <Screen scrollable contentContainerStyle={styles.content}>
       <PageHeader
         title="Criar cadastro"
-        subtitle="Fluxo simples para demonstrar autenticacao local e organizacao das telas."
+        subtitle="Cadastre-se para salvar seu contato, endereco e acompanhar seus pedidos."
       />
 
       <AppCard>

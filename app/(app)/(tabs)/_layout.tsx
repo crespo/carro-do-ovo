@@ -32,15 +32,6 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="native"
-        options={{
-          title: 'Recursos',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon icon={focused ? 'hardware-chip' : 'hardware-chip-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="profile"
         options={{
           title: 'Perfil',

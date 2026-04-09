@@ -11,7 +11,7 @@ export const mockEggCatalog: Egg[] = [
     vendor: 'Seu Zeca',
     rating: 4.8,
     stock: 18,
-    description: 'Bandeja com ovos caipiras selecionados para o cafe da manha e para vendas no bairro.',
+    description: 'Bandeja com ovos caipiras selecionados, ideal para o cafe da manha do dia a dia.',
     image: eggImage,
   },
   {
@@ -22,7 +22,7 @@ export const mockEggCatalog: Egg[] = [
     vendor: 'Dona Cida',
     rating: 4.3,
     stock: 25,
-    description: 'Opcao com melhor custo-beneficio para revenda rapida e compras de rotina.',
+    description: 'Opcao com excelente custo-beneficio para a rotina da casa.',
     image: eggImage,
   },
   {
@@ -33,7 +33,7 @@ export const mockEggCatalog: Egg[] = [
     vendor: 'Granja Bom Dia',
     rating: 4.9,
     stock: 12,
-    description: 'Linha premium com melhor acabamento e foco em clientes que buscam qualidade superior.',
+    description: 'Linha premium para quem busca ovos maiores e mais selecionados.',
     image: eggImage,
   },
   {
@@ -44,7 +44,7 @@ export const mockEggCatalog: Egg[] = [
     vendor: 'Sitio Horizonte',
     rating: 4.7,
     stock: 9,
-    description: 'Producao com perfil mais artesanal, ideal para destacar no catalogo do aplicativo.',
+    description: 'Producao mais artesanal, com sabor caseiro e frescor de fazenda.',
     image: eggImage,
   },
   {
@@ -55,7 +55,7 @@ export const mockEggCatalog: Egg[] = [
     vendor: 'Maria da Feira',
     rating: 4.6,
     stock: 15,
-    description: 'Ovos maiores e visualmente mais chamativos para o cliente escolher com rapidez.',
+    description: 'Ovos maiores e bem selecionados para quem prefere bandejas mais reforcadas.',
     image: eggImage,
   },
   {
@@ -66,7 +66,7 @@ export const mockEggCatalog: Egg[] = [
     vendor: 'Mercado Central',
     rating: 4.2,
     stock: 21,
-    description: 'Produto pensado para consumo frequente em padarias, lanchonetes e cozinhas pequenas.',
+    description: 'Boa escolha para consumo frequente em casa ou no pequeno comercio.',
     image: eggImage,
   },
   {
@@ -77,7 +77,7 @@ export const mockEggCatalog: Egg[] = [
     vendor: 'Rancho Verde',
     rating: 4.8,
     stock: 7,
-    description: 'Pacote com valor mais alto para demonstrar ticket medio e resumo do pedido.',
+    description: 'Combo ideal para familias que querem estocar mais por uma semana.',
     image: eggImage,
   },
   {
@@ -88,7 +88,7 @@ export const mockEggCatalog: Egg[] = [
     vendor: 'Granja Ouro',
     rating: 5,
     stock: 6,
-    description: 'Destaque visual do catalogo para reforcar a identidade premium do MVP.',
+    description: 'Selecao especial da semana com ovos premium e estoque limitado.',
     image: eggImage,
   },
 ];
