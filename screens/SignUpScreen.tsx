@@ -5,7 +5,7 @@ import FormInput from '@/components/FormInput';
 import { Colors } from '@/constants/colors';
 import { useAuth, UserRole } from '@/context/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import {
     ActivityIndicator,
     KeyboardAvoidingView,
@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 
 export default function SignUpScreen({ navigation }: any) {
-    const { signup, isLoading, error, user } = useAuth();
+    const { signup, isLoading, error } = useAuth();
 
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
@@ -32,13 +32,6 @@ export default function SignUpScreen({ navigation }: any) {
     useLayoutEffect(() => {
         navigation.setOptions({ title: 'Criar Conta' });
     }, [navigation]);
-
-    // Quando cadastro for bem-sucedido, navegar para Home
-    useEffect(() => {
-        if (user) {
-            navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-        }
-    }, [user]);
 
     function validate(): boolean {
         if (!name.trim()) {

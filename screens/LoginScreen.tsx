@@ -5,7 +5,7 @@ import FormInput from '@/components/FormInput';
 import { Colors } from '@/constants/colors';
 import { useAuth } from '@/context/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
     ActivityIndicator,
     Image,
@@ -19,19 +19,12 @@ import {
 } from 'react-native';
 
 export default function LoginScreen({ navigation }: any) {
-    const { login, isLoading, error, user } = useAuth();
+    const { login, isLoading, error } = useAuth();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isPasswordHidden, setIsPasswordHidden] = useState(true);
     const [validationError, setValidationError] = useState('');
-
-    // Quando autenticado, navegar para Home
-    useEffect(() => {
-        if (user) {
-            navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-        }
-    }, [user]);
 
     function validate(): boolean {
         if (!email.trim()) {
