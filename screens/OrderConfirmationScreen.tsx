@@ -1,14 +1,16 @@
 import Button from '@/components/Button';
 import { Colors } from '@/constants/colors';
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function OrderConfirmationScreen({ route, navigation }: any) {
     const orderNumber: string = route.params?.orderNumber ?? '#000000';
     const total: number = route.params?.total ?? 0;
 
     return (
-        <View style={styles.root}>
+        // ScrollView with flexGrow: 1 so content centers on large screens
+        // and scrolls gracefully on small ones
+        <ScrollView contentContainerStyle={styles.root}>
             <View style={styles.iconCircle}>
                 <Ionicons name="checkmark" size={64} color={Colors.lightText} />
             </View>
@@ -27,7 +29,7 @@ export default function OrderConfirmationScreen({ route, navigation }: any) {
             </View>
 
             <View style={styles.stepRow}>
-                {['Pedido recebido', 'Em preparo', 'Enviado', 'Entregue'].map((step, i) => (
+                {['Recebido', 'Em preparo', 'Enviado', 'Entregue'].map((step, i) => (
                     <View key={step} style={styles.step}>
                         <View style={[styles.stepDot, i === 0 && styles.stepDotActive]}>
                             {i === 0 && <Ionicons name="checkmark" size={12} color={Colors.lightText} />}
@@ -40,22 +42,20 @@ export default function OrderConfirmationScreen({ route, navigation }: any) {
             <View style={styles.notice}>
                 <Ionicons name="information-circle-outline" size={16} color={Colors.secondary800} />
                 <Text style={styles.noticeText}>
-                    Acompanhamento de pedidos em tempo real será disponibilizado em breve.
+                    Acompanhamento em tempo real será disponibilizado em breve.
                 </Text>
             </View>
 
-            <View style={styles.btnRow}>
-                <Button onPress={() => navigation.navigate('Home')}>
-                    Continuar Comprando
-                </Button>
-            </View>
-        </View>
+            <Button onPress={() => navigation.navigate('Home')}>
+                Continuar Comprando
+            </Button>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     root: {
-        flex: 1,
+        flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 28,
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         borderTopColor: Colors.secondaryAccent600,
         borderRightColor: Colors.secondaryAccent800,
         borderBottomColor: Colors.secondaryAccent800,
-        width: '100%',
+        alignSelf: 'stretch',
     },
     totalLabel: {
         fontFamily: 'inter',
@@ -121,8 +121,7 @@ const styles = StyleSheet.create({
     stepRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '100%',
-        marginTop: 4,
+        alignSelf: 'stretch',
     },
     step: {
         alignItems: 'center',
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.secondaryAccent600,
         borderRadius: 8,
         padding: 10,
-        width: '100%',
+        alignSelf: 'stretch',
     },
     noticeText: {
         fontFamily: 'inter',
@@ -161,9 +160,5 @@ const styles = StyleSheet.create({
         color: Colors.secondary800,
         flex: 1,
         lineHeight: 16,
-    },
-    btnRow: {
-        width: '100%',
-        marginTop: 8,
     },
 });

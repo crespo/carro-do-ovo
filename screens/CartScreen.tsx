@@ -20,17 +20,11 @@ function CartRow({ item }: { item: CartItem }) {
                     <Ionicons name="trash-outline" size={18} color="#c0392b" />
                 </Pressable>
                 <View style={styles.stepper}>
-                    <Pressable
-                        hitSlop={6}
-                        onPress={() => updateQuantity(item.egg.id, item.quantity - 1)}
-                    >
+                    <Pressable hitSlop={6} onPress={() => updateQuantity(item.egg.id, item.quantity - 1)}>
                         <Ionicons name="remove-circle-outline" size={24} color={Colors.primary500} />
                     </Pressable>
                     <Text style={styles.stepperQty}>{item.quantity}</Text>
-                    <Pressable
-                        hitSlop={6}
-                        onPress={() => updateQuantity(item.egg.id, item.quantity + 1)}
-                    >
+                    <Pressable hitSlop={6} onPress={() => updateQuantity(item.egg.id, item.quantity + 1)}>
                         <Ionicons name="add-circle-outline" size={24} color={Colors.primary500} />
                     </Pressable>
                 </View>
@@ -60,6 +54,7 @@ export default function CartScreen({ navigation }: any) {
 
     return (
         <View style={styles.root}>
+            {/* flex: 1 here is the key — constrains list height so footer stays on screen */}
             <FlatList
                 data={items}
                 keyExtractor={(i) => i.egg.id}
@@ -70,7 +65,9 @@ export default function CartScreen({ navigation }: any) {
 
             <View style={styles.footer}>
                 <View style={styles.totalRow}>
-                    <Text style={styles.totalLabel}>{totalItems} {totalItems === 1 ? 'item' : 'itens'}</Text>
+                    <Text style={styles.totalLabel}>
+                        {totalItems} {totalItems === 1 ? 'item' : 'itens'}
+                    </Text>
                     <Text style={styles.totalPrice}>R$ {totalPrice.toFixed(2)}</Text>
                 </View>
                 <Button onPress={() => navigation.navigate('Checkout')}>
@@ -90,9 +87,9 @@ const styles = StyleSheet.create({
     },
     list: {
         flex: 1,
-        padding: 16,
     },
     listContent: {
+        padding: 16,
         gap: 12,
     },
     row: {

@@ -5,7 +5,7 @@ export default function Button({ children, onPress, color }: any) {
     return (
         <Pressable
             onPress={onPress}
-            style={({ pressed }) => (pressed ? styles.pressed : styles.notPressed)}
+            style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}
         >
             <View
                 style={[
@@ -22,8 +22,13 @@ export default function Button({ children, onPress, color }: any) {
 }
 
 const styles = StyleSheet.create({
+    pressable: {
+        alignSelf: 'stretch',
+    },
+    pressed: {
+        opacity: 0.6,
+    },
     rootContainer: {
-        width: '100%',
         height: 45,
         justifyContent: 'center',
         alignItems: 'center',
@@ -55,12 +60,5 @@ const styles = StyleSheet.create({
         color: Colors.darkText,
         fontSize: 24,
         letterSpacing: 1,
-    },
-    pressed: {
-        flex: 1,
-        opacity: 0.6,
-    },
-    notPressed: {
-        flex: 1,
     },
 });

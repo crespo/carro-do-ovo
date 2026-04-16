@@ -14,7 +14,6 @@ export default function EggDetailScreen({ route, navigation }: any) {
 
     const selectedEgg = eggs.find((egg) => egg.id === eggId)!;
     const [qty, setQty] = useState(1);
-
     const cartItem = items.find((i) => i.egg.id === eggId);
 
     useLayoutEffect(() => {
@@ -22,102 +21,105 @@ export default function EggDetailScreen({ route, navigation }: any) {
     }, [eggId, navigation, selectedEgg]);
 
     function handleAddToCart() {
-        for (let i = 0; i < qty; i++) {
-            addItem(selectedEgg);
-        }
+        for (let i = 0; i < qty; i++) addItem(selectedEgg);
         navigation.navigate('Cart');
     }
 
     if (!selectedEgg) return null;
 
     return (
-        <ScrollView contentContainerStyle={styles.rootContainer}>
-            <Image source={{ uri: selectedEgg.imageUrl }} style={styles.image} />
+        <View style={styles.screen}>
+            {/* Scrollable product info — button lives BELOW, always visible */}
+            <ScrollView contentContainerStyle={styles.scroll}>
+                <Image source={{ uri: selectedEgg.imageUrl }} style={styles.image} />
 
-            <Text style={styles.title} numberOfLines={3}>
-                {selectedEgg.name}
-            </Text>
-
-            <View style={styles.vendorContainer}>
-                <Ionicons name="storefront-outline" size={14} color={Colors.primary500} />
-                <Text style={styles.vendor}>{selectedEgg.vendor}</Text>
-                <RatingLabel vendorRating={selectedEgg.vendorRating} />
-            </View>
-
-            <View style={styles.categoryBadge}>
-                <Text style={styles.categoryText}>{selectedEgg.category}</Text>
-            </View>
-
-            {selectedEgg.description ? (
-                <Text style={styles.description}>{selectedEgg.description}</Text>
-            ) : null}
-
-            <View style={styles.priceRow}>
-                <Text style={styles.price}>R$ {selectedEgg.price.toFixed(2)}</Text>
-                <Text style={styles.unit}>/ bandeja</Text>
-            </View>
-
-            <View style={styles.stock}>
-                <Ionicons name="cube-outline" size={14} color={Colors.secondary800} />
-                <Text style={styles.stockText}>{selectedEgg.quantity} disponíveis</Text>
-            </View>
-
-            {/* Quantity stepper */}
-            <View style={styles.stepperRow}>
-                <Pressable
-                    style={styles.stepperBtn}
-                    onPress={() => setQty((q) => Math.max(1, q - 1))}
-                    hitSlop={8}
-                >
-                    <Ionicons name="remove" size={22} color={Colors.primary500} />
-                </Pressable>
-                <Text style={styles.stepperQty}>{qty}</Text>
-                <Pressable
-                    style={styles.stepperBtn}
-                    onPress={() => setQty((q) => Math.min(selectedEgg.quantity, q + 1))}
-                    hitSlop={8}
-                >
-                    <Ionicons name="add" size={22} color={Colors.primary500} />
-                </Pressable>
-            </View>
-
-            <Text style={styles.subtotal}>
-                Subtotal: R$ {(selectedEgg.price * qty).toFixed(2)}
-            </Text>
-
-            <View style={styles.buttonRow}>
-                <Button onPress={handleAddToCart}>Adicionar ao Carrinho</Button>
-            </View>
-
-            {cartItem && (
-                <Text style={styles.alreadyInCart}>
-                    Você já tem {cartItem.quantity} no carrinho.
+                <Text style={styles.title} numberOfLines={3}>
+                    {selectedEgg.name}
                 </Text>
-            )}
-        </ScrollView>
+
+                <View style={styles.vendorRow}>
+                    <Ionicons name="storefront-outline" size={14} color={Colors.primary500} />
+                    <Text style={styles.vendor}>{selectedEgg.vendor}</Text>
+                    <RatingLabel vendorRating={selectedEgg.vendorRating} />
+                </View>
+
+                <View style={styles.categoryBadge}>
+                    <Text style={styles.categoryText}>{selectedEgg.category}</Text>
+                </View>
+
+                {!!selectedEgg.description && (
+                    <Text style={styles.description}>{selectedEgg.description}</Text>
+                )}
+
+                <View style={styles.priceRow}>
+                    <Text style={styles.price}>R$ {selectedEgg.price.toFixed(2)}</Text>
+                    <Text style={styles.unit}>/ bandeja</Text>
+                </View>
+
+                <View style={styles.stockRow}>
+                    <Ionicons name="cube-outline" size={14} color={Colors.secondary800} />
+                    <Text style={styles.stockText}>{selectedEgg.quantity} disponíveis</Text>
+                </View>
+            </ScrollView>
+
+            {/* Sticky footer — always on screen regardless of content length */}
+            <View style={styles.footer}>
+                <View style={styles.stepperRow}>
+                    <Pressable
+                        style={styles.stepperBtn}
+                        onPress={() => setQty((q) => Math.max(1, q - 1))}
+                        hitSlop={10}
+                    >
+                        <Ionicons name="remove" size={22} color={Colors.primary500} />
+                    </Pressable>
+                    <Text style={styles.stepperQty}>{qty}</Text>
+                    <Pressable
+                        style={styles.stepperBtn}
+                        onPress={() => setQty((q) => Math.min(selectedEgg.quantity, q + 1))}
+                        hitSlop={10}
+                    >
+                        <Ionicons name="add" size={22} color={Colors.primary500} />
+                    </Pressable>
+                    <Text style={styles.subtotal}>
+                        R$ {(selectedEgg.price * qty).toFixed(2)}
+                    </Text>
+                </View>
+
+                <Button onPress={handleAddToCart}>Adicionar ao Carrinho</Button>
+
+                {cartItem && (
+                    <Text style={styles.alreadyInCart}>
+                        Você já tem {cartItem.quantity} no carrinho.
+                    </Text>
+                )}
+            </View>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
-    rootContainer: {
+    screen: {
+        flex: 1,
+    },
+    scroll: {
         alignItems: 'center',
         padding: 20,
+        paddingBottom: 8,
         gap: 10,
-        paddingBottom: 40,
+    },
+    image: {
+        width: '90%',
+        height: 220,
+        borderRadius: 12,
     },
     title: {
         fontFamily: 'fredoka',
-        fontSize: 28,
+        fontSize: 26,
         color: Colors.primary500,
         letterSpacing: 1,
         textAlign: 'center',
     },
-    image: {
-        width: '90%',
-        height: 240,
-        borderRadius: 12,
-    },
-    vendorContainer: {
+    vendorRow: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: Colors.secondary800,
     },
-    stock: {
+    stockRow: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 4,
@@ -173,13 +175,19 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: Colors.secondary800,
     },
+    footer: {
+        padding: 16,
+        gap: 10,
+        borderTopWidth: 1,
+        borderTopColor: Colors.secondary600,
+        backgroundColor: Colors.backgroundColorOuter,
+    },
     stepperRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 20,
-        marginTop: 8,
+        gap: 16,
         backgroundColor: Colors.secondaryAccent500,
-        paddingHorizontal: 20,
+        paddingHorizontal: 16,
         paddingVertical: 10,
         borderRadius: 30,
         borderWidth: 3,
@@ -200,17 +208,15 @@ const styles = StyleSheet.create({
     },
     subtotal: {
         fontFamily: 'fredoka',
-        fontSize: 16,
-        color: Colors.darkText,
+        fontSize: 18,
+        color: Colors.primary500,
+        marginLeft: 'auto',
         letterSpacing: 0.5,
-    },
-    buttonRow: {
-        width: '100%',
-        marginTop: 4,
     },
     alreadyInCart: {
         fontFamily: 'inter',
         fontSize: 12,
         color: Colors.secondary800,
+        textAlign: 'center',
     },
 });

@@ -127,12 +127,13 @@ const styles = StyleSheet.create({
         color: Colors.darkText,
         textAlign: 'center',
     },
+    // flex: 1 constrains the FlatList; padding goes in contentContainerStyle only
     list: {
         flex: 1,
-        paddingHorizontal: 16,
     },
     listContent: {
-        paddingBottom: 8,
+        paddingHorizontal: 16,
+        paddingBottom: 12,
         gap: 10,
     },
     row: {
@@ -181,5 +182,8 @@ const styles = StyleSheet.create({
     },
     cta: {
         padding: 16,
+        borderTopWidth: 1,
+        borderTopColor: Colors.secondary600,
+        backgroundColor: Colors.backgroundColorOuter,
     },
 });
