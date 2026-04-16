@@ -67,7 +67,8 @@ export default function ProducerDashboardScreen({ navigation }: any) {
             <FlatList
                 data={listings}
                 keyExtractor={(e) => e.id}
-                contentContainerStyle={styles.list}
+                style={styles.list}
+                contentContainerStyle={styles.listContent}
                 ListEmptyComponent={
                     <View style={styles.empty}>
                         <Ionicons name="basket-outline" size={56} color={Colors.secondary600} />
@@ -127,7 +128,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     list: {
+        flex: 1,
         paddingHorizontal: 16,
+    },
+    listContent: {
         paddingBottom: 8,
         gap: 10,
     },

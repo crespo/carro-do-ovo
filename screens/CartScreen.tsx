@@ -63,7 +63,8 @@ export default function CartScreen({ navigation }: any) {
             <FlatList
                 data={items}
                 keyExtractor={(i) => i.egg.id}
-                contentContainerStyle={styles.list}
+                style={styles.list}
+                contentContainerStyle={styles.listContent}
                 renderItem={({ item }) => <CartRow item={item} />}
             />
 
@@ -88,7 +89,10 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     list: {
+        flex: 1,
         padding: 16,
+    },
+    listContent: {
         gap: 12,
     },
     row: {
