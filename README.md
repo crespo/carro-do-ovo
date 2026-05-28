@@ -1,50 +1,84 @@
-# Welcome to your Expo app 👋
+# Carro do Ovo
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Marketplace mobile que conecta produtores de ovos a compradores.
 
-## Get started
+## Sobre
 
-1. Install dependencies
+App em React Native (Expo) com dois perfis selecionados no cadastro:
 
-   ```bash
-   npm install
-   ```
+- **buyer**: navega o catálogo de anúncios em tempo real, monta o carrinho, finaliza a compra e acompanha o histórico de pedidos.
+- **producer**: gerencia os próprios anúncios e atualiza o status dos pedidos que recebeu.
 
-2. Start the app
+Autenticação e dados ficam no Firebase (Auth + Firestore), com listeners em tempo real.
 
-   ```bash
-   npx expo start
-   ```
+## Stack
 
-In the output, you'll find options to open the app in a
+- Expo SDK 54, React Native 0.81, TypeScript
+- Expo Router + React Navigation native-stack
+- Firebase Auth + Firestore (Web SDK v12)
+- Estado em React Context + `useReducer`
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Setup
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+1. `npm install`
+2. Copiar `.env.example` para `.env` e preencher com as credenciais do projeto Firebase (Console → ⚙️ Project settings → Your apps → SDK setup and configuration).
+3. No Console do Firebase:
+   - **Authentication** → habilitar provider **Email/Password**.
+   - **Firestore Database** → criar database (modo de produção).
+   - **Firestore → Rules** → colar o conteúdo de [`firestore.rules`](firestore.rules) e **Publish**.
+4. `npx expo start` — abrir no Expo Go, emulador ou web.
 
-## Get a fresh project
+Na primeira vez que um usuário abrir "Meus Pedidos" / "Pedidos Recebidos", o Firestore pode pedir a criação de um **índice composto** (`buyerId + createdAt desc` e `producerIds array-contains + createdAt desc`). O link de criação aparece no erro do console — clicar resolve.
 
-When you're ready, run:
+## Scripts
 
-```bash
-npm run reset-project
+- `npm run start` — Metro bundler
+- `npm run android` / `npm run ios` / `npm run web` — abrir em cada plataforma
+- `npm run lint` — ESLint (config do Expo)
+
+## Estrutura
+
+- `app/` — rotas (Expo Router). `app/index.tsx` decide entre stack de buyer e producer pelo `user.role`.
+- `screens/` — telas do buyer (`LoginScreen`, `SignUpScreen`, `SelectEggsScreen`, `EggDetailScreen`, `CartScreen`, `CheckoutScreen`, `OrderConfirmationScreen`, `MyOrdersScreen`).
+- `screens/producer/` — telas do producer (`ProducerDashboardScreen`, `CreateListingScreen`, `ReceivedOrdersScreen`).
+- `components/` — UI reaproveitada (`Button`, `Card`, `FormInput`, `EggList/`, etc.).
+- `context/` — `AuthContext`, `StoreContext`, `CartContext`, `OrdersContext` (lógica inline no Provider via `useReducer`, com listeners do Firestore vinculados ao usuário logado).
+- `config/firebase.ts` — init do Firebase app, Auth (persistência em AsyncStorage) e Firestore.
+- `constants/`, `models/` — temas, tipos compartilhados.
+- `firestore.rules` — source of truth das regras do Firestore (colar no console).
+
+## Coleções no Firestore
+
+### `users/{uid}`
+
+```
+{ name, role: 'buyer' | 'producer', email, createdAt }
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### `listings/{id}`
 
-## Learn more
+```
+{ name, price, quantity, category, description, imageUrl, vendor,
+  vendorRating, producerId, createdAt }
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### `orders/{id}`
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+{
+  buyerId, buyerName,
+  items: [{ eggId, name, price, quantity, vendor, producerId, imageUrl }],
+  producerIds: string[],         // denormalizado para queries array-contains
+  total,
+  address: { street, number, neighborhood, city },
+  paymentMethod: 'card' | 'pix' | 'boleto',
+  status: 'received' | 'preparing' | 'shipped' | 'delivered',
+  createdAt: number
+}
+```
 
-## Join the community
+## Fluxos
 
-Join our community of developers creating universal apps.
+**Buyer:** login → catálogo (tempo real) → detalhe → adicionar ao carrinho → checkout (endereço + pagamento) → confirmação → "Meus Pedidos" (status acompanhado em tempo real).
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+**Producer:** login → dashboard com seus anúncios → criar / editar / excluir → "Pedidos Recebidos" (apenas itens dos seus anúncios) → avançar status (`received` → `preparing` → `shipped` → `delivered`).
