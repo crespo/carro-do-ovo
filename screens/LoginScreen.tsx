@@ -60,6 +60,8 @@ export default function LoginScreen({ navigation }: any) {
                         <Image
                             style={styles.image}
                             source={require('@/assets/images/carro-do-ovo/main-logo.png')}
+                            accessibilityElementsHidden
+                            importantForAccessibility="no"
                         />
                     </View>
 
@@ -69,10 +71,12 @@ export default function LoginScreen({ navigation }: any) {
                                 autoComplete="email"
                                 inputMode="email"
                                 placeholder="seu@email.com"
+                                placeholderTextColor={Colors.secondary800}
                                 value={email}
                                 onChangeText={setEmail}
                                 autoCapitalize="none"
                                 keyboardType="email-address"
+                                accessibilityLabel="Email"
                             />
                         </FormInput>
 
@@ -85,8 +89,15 @@ export default function LoginScreen({ navigation }: any) {
                                     value={password}
                                     onChangeText={setPassword}
                                     placeholder="••••••"
+                                    placeholderTextColor={Colors.secondary800}
+                                    accessibilityLabel="Senha"
                                 />
-                                <Pressable onPress={() => setIsPasswordHidden((v) => !v)}>
+                                <Pressable
+                                    onPress={() => setIsPasswordHidden((v) => !v)}
+                                    accessibilityRole="button"
+                                    accessibilityLabel={isPasswordHidden ? 'Mostrar senha' : 'Ocultar senha'}
+                                    hitSlop={8}
+                                >
                                     <Ionicons
                                         name={isPasswordHidden ? 'eye-off' : 'eye'}
                                         size={28}
@@ -97,13 +108,23 @@ export default function LoginScreen({ navigation }: any) {
                         </FormInput>
 
                         {(validationError || error) ? (
-                            <Text style={styles.errorText}>{validationError || error}</Text>
+                            <Text
+                                style={styles.errorText}
+                                accessibilityLiveRegion="polite"
+                                accessibilityRole="alert"
+                            >
+                                {validationError || error}
+                            </Text>
                         ) : null}
 
                         <Dash />
 
                         {isLoading ? (
-                            <ActivityIndicator size="large" color={Colors.primary500} />
+                            <ActivityIndicator
+                                size="large"
+                                color={Colors.primary500}
+                                accessibilityLabel="Entrando"
+                            />
                         ) : (
                             <>
                                 <Button onPress={loginButtonHandler}>Entre</Button>
@@ -112,10 +133,6 @@ export default function LoginScreen({ navigation }: any) {
                                 </Button>
                             </>
                         )}
-
-                        <Text style={styles.hintText}>
-                            Teste: comprador@teste.com ou produtor@teste.com{'\n'}Senha: 123456
-                        </Text>
                     </Card>
                 </View>
             </KeyboardAvoidingView>
@@ -150,12 +167,5 @@ const styles = StyleSheet.create({
         fontFamily: 'inter',
         fontSize: 13,
         textAlign: 'center',
-    },
-    hintText: {
-        color: Colors.secondary800,
-        fontFamily: 'inter',
-        fontSize: 11,
-        textAlign: 'center',
-        marginTop: 4,
     },
 });

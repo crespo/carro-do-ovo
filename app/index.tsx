@@ -16,7 +16,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { useEffect } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -56,8 +56,23 @@ function CartIcon({ navigation }: { navigation: any }) {
 }
 
 function AppNavigator() {
-    const { user, logout } = useAuth();
+    const { user, logout, isInitializing } = useAuth();
     const isProducer = user?.role === 'producer';
+
+    if (isInitializing) {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: Colors.backgroundColorInner,
+                }}
+            >
+                <ActivityIndicator size="large" color={Colors.primary500} />
+            </View>
+        );
+    }
 
     const logoutBtn = (
         <Pressable onPress={logout} hitSlop={12}>
