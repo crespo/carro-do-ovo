@@ -21,7 +21,6 @@ export default function EggItem({ id, name, vendor, vendorRating, price, imageUr
                 styles.rootContainer,
                 {
                     aspectRatio: 0.88,
-                    flexGrow: 1,
                     width: '50%',
                     position: 'relative',
                     paddingHorizontal: 4,
