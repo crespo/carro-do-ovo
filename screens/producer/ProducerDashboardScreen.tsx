@@ -5,7 +5,7 @@ import { useStore } from '@/context/StoreContext';
 import Egg from '@/models/eggs';
 import { Ionicons } from '@expo/vector-icons';
 import { useLayoutEffect } from 'react';
-import { Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
 function ListingRow({ egg, onEdit, onDelete }: { egg: Egg; onEdit: () => void; onDelete: () => void }) {
     return (
@@ -17,10 +17,22 @@ function ListingRow({ egg, onEdit, onDelete }: { egg: Egg; onEdit: () => void; o
                 </Text>
             </View>
             <View style={styles.rowActions}>
-                <Pressable onPress={onEdit} hitSlop={8} style={styles.actionBtn}>
+                <Pressable
+                    onPress={onEdit}
+                    hitSlop={8}
+                    style={styles.actionBtn}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Editar anúncio ${egg.name}`}
+                >
                     <Ionicons name="pencil-outline" size={20} color={Colors.primary500} />
                 </Pressable>
-                <Pressable onPress={onDelete} hitSlop={8} style={styles.actionBtn}>
+                <Pressable
+                    onPress={onDelete}
+                    hitSlop={8}
+                    style={styles.actionBtn}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Remover anúncio ${egg.name}`}
+                >
                     <Ionicons name="trash-outline" size={20} color="#c0392b" />
                 </Pressable>
             </View>
@@ -30,7 +42,7 @@ function ListingRow({ egg, onEdit, onDelete }: { egg: Egg; onEdit: () => void; o
 
 export default function ProducerDashboardScreen({ navigation }: any) {
     const { user } = useAuth();
-    const { getProducerListings, deleteListing } = useStore();
+    const { getProducerListings, deleteListing, isInitializing } = useStore();
 
     const listings = getProducerListings(user!.id);
 
@@ -44,19 +56,49 @@ export default function ProducerDashboardScreen({ navigation }: any) {
             `Deseja remover "${egg.name}"?`,
             [
                 { text: 'Cancelar', style: 'cancel' },
-                { text: 'Remover', style: 'destructive', onPress: () => deleteListing(egg.id) },
+                {
+                    text: 'Remover',
+                    style: 'destructive',
+                    onPress: async () => {
+                        try {
+                            await deleteListing(egg.id);
+                        } catch (err) {
+                            Alert.alert('Erro', (err as Error).message);
+                        }
+                    },
+                },
             ],
+        );
+    }
+
+    if (isInitializing) {
+        return (
+            <View style={[styles.root, styles.center]}>
+                <ActivityIndicator
+                    size="large"
+                    color={Colors.primary500}
+                    accessibilityLabel="Carregando anúncios"
+                />
+            </View>
         );
     }
 
     return (
         <View style={styles.root}>
             <View style={styles.statsRow}>
-                <View style={styles.statCard}>
+                <View
+                    style={styles.statCard}
+                    accessible
+                    accessibilityLabel={`${listings.length} anúncios ativos`}
+                >
                     <Text style={styles.statNumber}>{listings.length}</Text>
                     <Text style={styles.statLabel}>Anúncios ativos</Text>
                 </View>
-                <View style={styles.statCard}>
+                <View
+                    style={styles.statCard}
+                    accessible
+                    accessibilityLabel={`Valor total, considerando uma bandeja de cada anúncio: R$ ${listings.reduce((s, e) => s + e.price, 0).toFixed(0)}`}
+                >
                     <Text style={styles.statNumber}>
                         R$ {listings.reduce((s, e) => s + e.price, 0).toFixed(0)}
                     </Text>
@@ -71,7 +113,13 @@ export default function ProducerDashboardScreen({ navigation }: any) {
                 contentContainerStyle={styles.listContent}
                 ListEmptyComponent={
                     <View style={styles.empty}>
-                        <Ionicons name="basket-outline" size={56} color={Colors.secondary600} />
+                        <Ionicons
+                            name="basket-outline"
+                            size={56}
+                            color={Colors.secondary600}
+                            accessibilityElementsHidden
+                            importantForAccessibility="no"
+                        />
                         <Text style={styles.emptyText}>Nenhum anúncio ainda.</Text>
                         <Text style={styles.emptyText}>Crie seu primeiro produto abaixo!</Text>
                     </View>
@@ -97,6 +145,10 @@ export default function ProducerDashboardScreen({ navigation }: any) {
 const styles = StyleSheet.create({
     root: {
         flex: 1,
+    },
+    center: {
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     statsRow: {
         flexDirection: 'row',

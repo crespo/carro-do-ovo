@@ -49,7 +49,7 @@ export default function CreateListingScreen({ route, navigation }: any) {
         navigation.setOptions({ title: isEditing ? 'Editar Anúncio' : 'Novo Anúncio' });
     }, [navigation, isEditing]);
 
-    function handleSave() {
+    async function handleSave() {
         if (!name.trim()) {
             Alert.alert('Campo obrigatório', 'Informe o nome do produto.');
             return;
@@ -74,13 +74,16 @@ export default function CreateListingScreen({ route, navigation }: any) {
             imageUrl,
         };
 
-        if (isEditing) {
-            updateListing(existingEgg.id, data);
-        } else {
-            addListing(user!.id, user!.name, data);
+        try {
+            if (isEditing) {
+                await updateListing(existingEgg.id, data);
+            } else {
+                await addListing(user!.id, user!.name, data);
+            }
+            navigation.goBack();
+        } catch (err) {
+            Alert.alert('Erro', (err as Error).message);
         }
-
-        navigation.goBack();
     }
 
     return (
@@ -90,7 +93,7 @@ export default function CreateListingScreen({ route, navigation }: any) {
         >
             <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
 
-                <Text style={styles.sectionTitle}>Produto</Text>
+                <Text style={styles.sectionTitle} accessibilityRole="header">Produto</Text>
 
                 <View style={styles.field}>
                     <Text style={styles.label}>Nome</Text>
@@ -100,6 +103,7 @@ export default function CreateListingScreen({ route, navigation }: any) {
                         onChangeText={setName}
                         placeholder="Ex: Ovos Caipiras Premium"
                         placeholderTextColor={Colors.secondary800}
+                        accessibilityLabel="Nome do produto"
                     />
                 </View>
 
@@ -113,6 +117,7 @@ export default function CreateListingScreen({ route, navigation }: any) {
                             placeholder="0,00"
                             placeholderTextColor={Colors.secondary800}
                             keyboardType="decimal-pad"
+                            accessibilityLabel="Preço em reais"
                         />
                     </View>
                     <View style={[styles.field, { flex: 1 }]}>
@@ -123,18 +128,22 @@ export default function CreateListingScreen({ route, navigation }: any) {
                             onChangeText={setQuantity}
                             keyboardType="number-pad"
                             placeholderTextColor={Colors.secondary800}
+                            accessibilityLabel="Quantidade de ovos por bandeja"
                         />
                     </View>
                 </View>
 
                 <View style={styles.field}>
                     <Text style={styles.label}>Categoria</Text>
-                    <View style={styles.categoryRow}>
+                    <View style={styles.categoryRow} accessibilityRole="radiogroup">
                         {CATEGORIES.map((c) => (
                             <Pressable
                                 key={c.value}
                                 style={[styles.categoryChip, category === c.value && styles.categoryChipActive]}
                                 onPress={() => setCategory(c.value)}
+                                accessibilityRole="radio"
+                                accessibilityState={{ selected: category === c.value }}
+                                accessibilityLabel={c.label}
                             >
                                 <Text style={[styles.categoryText, category === c.value && styles.categoryTextActive]}>
                                     {c.label}
@@ -155,21 +164,27 @@ export default function CreateListingScreen({ route, navigation }: any) {
                         multiline
                         numberOfLines={4}
                         textAlignVertical="top"
+                        accessibilityLabel="Descrição do produto"
                     />
                 </View>
 
-                <Text style={styles.sectionTitle}>Foto</Text>
-                <View style={styles.imagePickerRow}>
+                <Text style={styles.sectionTitle} accessibilityRole="header">Foto</Text>
+                <View style={styles.imagePickerRow} accessibilityRole="radiogroup">
                     {PRESET_IMAGES.map((url, idx) => (
                         <Pressable
                             key={idx}
                             style={[styles.imageOption, imageUrl === url && styles.imageOptionActive]}
                             onPress={() => setImageUrl(url)}
+                            accessibilityRole="radio"
+                            accessibilityState={{ selected: imageUrl === url }}
+                            accessibilityLabel={`Foto ${idx + 1}`}
                         >
                             <Ionicons
                                 name={imageUrl === url ? 'checkmark-circle' : 'image-outline'}
                                 size={28}
                                 color={imageUrl === url ? Colors.primaryAccent500 : Colors.secondary800}
+                                accessibilityElementsHidden
+                                importantForAccessibility="no"
                             />
                             <Text style={styles.imageOptionText}>Foto {idx + 1}</Text>
                         </Pressable>
@@ -251,7 +266,8 @@ const styles = StyleSheet.create({
         color: Colors.darkText,
     },
     categoryTextActive: {
-        color: Colors.lightText,
+        // a11y: era lightText sobre primaryAccent500 = 1.72:1 (falha AA). primary800 agora = 12.98:1.
+        color: Colors.primary800,
         fontFamily: 'fredoka',
     },
     imagePickerRow: {
