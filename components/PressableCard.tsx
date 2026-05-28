@@ -1,10 +1,13 @@
 import { Colors } from '@/constants/colors';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-export default function PressableCard({ children, onPress }: any) {
+export default function PressableCard({ children, onPress, accessibilityLabel, accessibilityHint }: any) {
     return (
         <Pressable
             onPress={onPress}
+            accessibilityRole="button"
+            accessibilityLabel={accessibilityLabel}
+            accessibilityHint={accessibilityHint}
             style={({ pressed }) => (pressed ? styles.pressed : styles.notPressed)}
         >
             <View style={styles.card}>{children}</View>

@@ -4,7 +4,9 @@ export const Colors = {
     primary800: '#3b1b0e',
     secondary500: '#dbd3c5',
     secondary600: '#c9bca4',
-    secondary800: '#9b8f78',
+    // a11y: escurecido de #9b8f78 para atingir WCAG AA (4.5:1) como texto secundário/placeholder
+    // sobre secondary500/secondaryAccent600/backgroundColorInner. Antes 2.14–2.99:1, agora 5.13–7.17:1.
+    secondary800: '#5e5240',
     primaryAccent500: '#fcb101',
     primaryAccent600: '#feec7a',
     primaryAccent800: '#9d4901',

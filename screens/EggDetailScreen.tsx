@@ -31,33 +31,49 @@ export default function EggDetailScreen({ route, navigation }: any) {
         <View style={styles.screen}>
             {/* Scrollable product info — button lives BELOW, always visible */}
             <ScrollView contentContainerStyle={styles.scroll}>
-                <Image source={{ uri: selectedEgg.imageUrl }} style={styles.image} />
+                <Image
+                    source={{ uri: selectedEgg.imageUrl }}
+                    style={styles.image}
+                    accessibilityLabel={`Foto do produto ${selectedEgg.name}`}
+                />
 
-                <Text style={styles.title} numberOfLines={3}>
+                <Text style={styles.title} numberOfLines={3} accessibilityRole="header">
                     {selectedEgg.name}
                 </Text>
 
                 <View style={styles.vendorRow}>
-                    <Ionicons name="storefront-outline" size={14} color={Colors.primary500} />
-                    <Text style={styles.vendor}>{selectedEgg.vendor}</Text>
+                    <Ionicons
+                        name="storefront-outline"
+                        size={14}
+                        color={Colors.primary500}
+                        accessibilityElementsHidden
+                        importantForAccessibility="no"
+                    />
+                    <Text style={styles.vendor} accessibilityLabel={`Vendedor: ${selectedEgg.vendor}`}>{selectedEgg.vendor}</Text>
                     <RatingLabel vendorRating={selectedEgg.vendorRating} />
                 </View>
 
                 <View style={styles.categoryBadge}>
-                    <Text style={styles.categoryText}>{selectedEgg.category}</Text>
+                    <Text style={styles.categoryText} accessibilityLabel={`Categoria: ${selectedEgg.category}`}>{selectedEgg.category}</Text>
                 </View>
 
                 {!!selectedEgg.description && (
                     <Text style={styles.description}>{selectedEgg.description}</Text>
                 )}
 
-                <View style={styles.priceRow}>
+                <View style={styles.priceRow} accessible accessibilityLabel={`Preço: R$ ${selectedEgg.price.toFixed(2)} por bandeja`}>
                     <Text style={styles.price}>R$ {selectedEgg.price.toFixed(2)}</Text>
                     <Text style={styles.unit}>/ bandeja</Text>
                 </View>
 
                 <View style={styles.stockRow}>
-                    <Ionicons name="cube-outline" size={14} color={Colors.secondary800} />
+                    <Ionicons
+                        name="cube-outline"
+                        size={14}
+                        color={Colors.secondary800}
+                        accessibilityElementsHidden
+                        importantForAccessibility="no"
+                    />
                     <Text style={styles.stockText}>{selectedEgg.quantity} disponíveis</Text>
                 </View>
             </ScrollView>
@@ -69,18 +85,22 @@ export default function EggDetailScreen({ route, navigation }: any) {
                         style={styles.stepperBtn}
                         onPress={() => setQty((q) => Math.max(1, q - 1))}
                         hitSlop={10}
+                        accessibilityRole="button"
+                        accessibilityLabel="Diminuir quantidade"
                     >
                         <Ionicons name="remove" size={22} color={Colors.primary500} />
                     </Pressable>
-                    <Text style={styles.stepperQty}>{qty}</Text>
+                    <Text style={styles.stepperQty} accessibilityLabel={`Quantidade ${qty}`}>{qty}</Text>
                     <Pressable
                         style={styles.stepperBtn}
                         onPress={() => setQty((q) => Math.min(selectedEgg.quantity, q + 1))}
                         hitSlop={10}
+                        accessibilityRole="button"
+                        accessibilityLabel="Aumentar quantidade"
                     >
                         <Ionicons name="add" size={22} color={Colors.primary500} />
                     </Pressable>
-                    <Text style={styles.subtotal}>
+                    <Text style={styles.subtotal} accessibilityLabel={`Subtotal R$ ${(selectedEgg.price * qty).toFixed(2)}`}>
                         R$ {(selectedEgg.price * qty).toFixed(2)}
                     </Text>
                 </View>

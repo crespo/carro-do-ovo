@@ -18,7 +18,7 @@ import {
 type PaymentMethod = 'card' | 'pix' | 'boleto';
 
 function SectionTitle({ children }: { children: string }) {
-    return <Text style={styles.sectionTitle}>{children}</Text>;
+    return <Text style={styles.sectionTitle} accessibilityRole="header">{children}</Text>;
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -30,7 +30,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     );
 }
 
-function StyledInput(props: React.ComponentProps<typeof TextInput>) {
+function StyledInput(props: React.ComponentProps<typeof TextInput> & { accessibilityLabel?: string }) {
     return <TextInput style={styles.input} placeholderTextColor={Colors.secondary800} {...props} />;
 }
 
@@ -115,29 +115,29 @@ export default function CheckoutScreen({ navigation }: any) {
                 <SectionTitle>Endereço de Entrega</SectionTitle>
 
                 <Field label="Rua / Avenida">
-                    <StyledInput value={street} onChangeText={setStreet} placeholder="Ex: Rua das Flores" />
+                    <StyledInput value={street} onChangeText={setStreet} placeholder="Ex: Rua das Flores" accessibilityLabel="Rua ou avenida" />
                 </Field>
 
                 <View style={styles.row}>
                     <View style={{ flex: 1 }}>
                         <Field label="Número">
-                            <StyledInput value={number} onChangeText={setNumber} placeholder="123" keyboardType="number-pad" />
+                            <StyledInput value={number} onChangeText={setNumber} placeholder="123" keyboardType="number-pad" accessibilityLabel="Número do endereço" />
                         </Field>
                     </View>
                     <View style={{ flex: 2 }}>
                         <Field label="Bairro">
-                            <StyledInput value={neighborhood} onChangeText={setNeighborhood} placeholder="Centro" />
+                            <StyledInput value={neighborhood} onChangeText={setNeighborhood} placeholder="Centro" accessibilityLabel="Bairro" />
                         </Field>
                     </View>
                 </View>
 
                 <Field label="Cidade">
-                    <StyledInput value={city} onChangeText={setCity} placeholder="São Paulo" />
+                    <StyledInput value={city} onChangeText={setCity} placeholder="São Paulo" accessibilityLabel="Cidade" />
                 </Field>
 
                 <SectionTitle>Forma de Pagamento</SectionTitle>
 
-                <View style={styles.methodRow}>
+                <View style={styles.methodRow} accessibilityRole="radiogroup">
                     {paymentMethods.map((m) => (
                         <Pressable
                             key={m.key}
@@ -153,11 +153,16 @@ export default function CheckoutScreen({ navigation }: any) {
                                 }
                                 setMethod(m.key);
                             }}
+                            accessibilityRole="radio"
+                            accessibilityState={{ selected: method === m.key, disabled: !m.available }}
+                            accessibilityLabel={m.available ? m.label : `${m.label}, em breve`}
                         >
                             <Ionicons
                                 name={m.icon}
                                 size={20}
                                 color={method === m.key ? Colors.lightText : Colors.secondary800}
+                                accessibilityElementsHidden
+                                importantForAccessibility="no"
                             />
                             <Text style={[styles.methodLabel, method === m.key && styles.methodLabelActive]}>
                                 {m.label}
@@ -178,6 +183,7 @@ export default function CheckoutScreen({ navigation }: any) {
                                 placeholder="0000 0000 0000 0000"
                                 keyboardType="number-pad"
                                 maxLength={19}
+                                accessibilityLabel="Número do cartão"
                             />
                         </Field>
                         <Field label="Nome no cartão">
@@ -186,6 +192,7 @@ export default function CheckoutScreen({ navigation }: any) {
                                 onChangeText={(t) => setCardName(t.toUpperCase())}
                                 placeholder="NOME COMO NO CARTÃO"
                                 autoCapitalize="characters"
+                                accessibilityLabel="Nome no cartão"
                             />
                         </Field>
                         <View style={styles.row}>
@@ -197,6 +204,7 @@ export default function CheckoutScreen({ navigation }: any) {
                                         placeholder="MM/AA"
                                         keyboardType="number-pad"
                                         maxLength={5}
+                                        accessibilityLabel="Validade do cartão, mês e ano"
                                     />
                                 </Field>
                             </View>
@@ -209,12 +217,19 @@ export default function CheckoutScreen({ navigation }: any) {
                                         keyboardType="number-pad"
                                         secureTextEntry
                                         maxLength={4}
+                                        accessibilityLabel="Código de segurança CVV"
                                     />
                                 </Field>
                             </View>
                         </View>
                         <View style={styles.mockNotice}>
-                            <Ionicons name="lock-closed-outline" size={13} color={Colors.secondary800} />
+                            <Ionicons
+                                name="lock-closed-outline"
+                                size={13}
+                                color={Colors.secondary800}
+                                accessibilityElementsHidden
+                                importantForAccessibility="no"
+                            />
                             <Text style={styles.mockNoticeText}>
                                 Ambiente de testes — nenhum dado real é processado.
                             </Text>

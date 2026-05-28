@@ -9,26 +9,46 @@ function CartRow({ item }: { item: CartItem }) {
 
     return (
         <View style={styles.row}>
-            <Image source={{ uri: item.egg.imageUrl }} style={styles.rowImage} />
+            <Image
+                source={{ uri: item.egg.imageUrl }}
+                style={styles.rowImage}
+                accessibilityElementsHidden
+                importantForAccessibility="no"
+            />
             <View style={styles.rowInfo}>
                 <Text style={styles.rowName} numberOfLines={2}>{item.egg.name}</Text>
                 <Text style={styles.rowVendor}>{item.egg.vendor}</Text>
                 <Text style={styles.rowPrice}>R$ {item.egg.price.toFixed(2)}</Text>
             </View>
             <View style={styles.rowRight}>
-                <Pressable onPress={() => removeItem(item.egg.id)} hitSlop={8}>
+                <Pressable
+                    onPress={() => removeItem(item.egg.id)}
+                    hitSlop={8}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Remover ${item.egg.name} do carrinho`}
+                >
                     <Ionicons name="trash-outline" size={18} color="#c0392b" />
                 </Pressable>
                 <View style={styles.stepper}>
-                    <Pressable hitSlop={6} onPress={() => updateQuantity(item.egg.id, item.quantity - 1)}>
+                    <Pressable
+                        hitSlop={6}
+                        onPress={() => updateQuantity(item.egg.id, item.quantity - 1)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Diminuir quantidade de ${item.egg.name}`}
+                    >
                         <Ionicons name="remove-circle-outline" size={24} color={Colors.primary500} />
                     </Pressable>
-                    <Text style={styles.stepperQty}>{item.quantity}</Text>
-                    <Pressable hitSlop={6} onPress={() => updateQuantity(item.egg.id, item.quantity + 1)}>
+                    <Text style={styles.stepperQty} accessibilityLabel={`Quantidade ${item.quantity}`}>{item.quantity}</Text>
+                    <Pressable
+                        hitSlop={6}
+                        onPress={() => updateQuantity(item.egg.id, item.quantity + 1)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Aumentar quantidade de ${item.egg.name}`}
+                    >
                         <Ionicons name="add-circle-outline" size={24} color={Colors.primary500} />
                     </Pressable>
                 </View>
-                <Text style={styles.rowSubtotal}>
+                <Text style={styles.rowSubtotal} accessibilityLabel={`Subtotal R$ ${(item.egg.price * item.quantity).toFixed(2)}`}>
                     R$ {(item.egg.price * item.quantity).toFixed(2)}
                 </Text>
             </View>
@@ -42,8 +62,14 @@ export default function CartScreen({ navigation }: any) {
     if (items.length === 0) {
         return (
             <View style={styles.emptyContainer}>
-                <Ionicons name="cart-outline" size={72} color={Colors.secondary600} />
-                <Text style={styles.emptyTitle}>Carrinho vazio</Text>
+                <Ionicons
+                    name="cart-outline"
+                    size={72}
+                    color={Colors.secondary600}
+                    accessibilityElementsHidden
+                    importantForAccessibility="no"
+                />
+                <Text style={styles.emptyTitle} accessibilityRole="header">Carrinho vazio</Text>
                 <Text style={styles.emptySubtitle}>Adicione produtos para continuar.</Text>
                 <View style={styles.emptyBtn}>
                     <Button onPress={() => navigation.navigate('Home')}>Ver Produtos</Button>
@@ -73,7 +99,12 @@ export default function CartScreen({ navigation }: any) {
                 <Button onPress={() => navigation.navigate('Checkout')}>
                     Finalizar Compra
                 </Button>
-                <Pressable onPress={clearCart} style={styles.clearBtn}>
+                <Pressable
+                    onPress={clearCart}
+                    style={styles.clearBtn}
+                    accessibilityRole="button"
+                    accessibilityLabel="Limpar carrinho"
+                >
                     <Text style={styles.clearText}>Limpar carrinho</Text>
                 </Pressable>
             </View>

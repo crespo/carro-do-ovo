@@ -79,8 +79,10 @@ export default function SignUpScreen({ navigation }: any) {
                                 autoComplete="name"
                                 inputMode="text"
                                 placeholder="Seu nome..."
+                                placeholderTextColor={Colors.secondary800}
                                 value={name}
                                 onChangeText={setName}
+                                accessibilityLabel="Nome"
                             />
                         </FormInput>
 
@@ -89,8 +91,10 @@ export default function SignUpScreen({ navigation }: any) {
                                 autoComplete="family-name"
                                 inputMode="text"
                                 placeholder="Seu sobrenome..."
+                                placeholderTextColor={Colors.secondary800}
                                 value={surname}
                                 onChangeText={setSurname}
+                                accessibilityLabel="Sobrenome"
                             />
                         </FormInput>
 
@@ -99,10 +103,12 @@ export default function SignUpScreen({ navigation }: any) {
                                 autoComplete="email"
                                 inputMode="email"
                                 placeholder="seu@email.com"
+                                placeholderTextColor={Colors.secondary800}
                                 value={email}
                                 onChangeText={setEmail}
                                 autoCapitalize="none"
                                 keyboardType="email-address"
+                                accessibilityLabel="Email"
                             />
                         </FormInput>
 
@@ -113,10 +119,18 @@ export default function SignUpScreen({ navigation }: any) {
                                     secureTextEntry={isPasswordHidden}
                                     style={styles.passwordInput}
                                     placeholder="Mínimo 6 caracteres..."
+                                    placeholderTextColor={Colors.secondary800}
                                     value={password}
                                     onChangeText={setPassword}
+                                    accessibilityLabel="Senha"
+                                    accessibilityHint="Mínimo 6 caracteres"
                                 />
-                                <Pressable onPress={() => setIsPasswordHidden((v) => !v)}>
+                                <Pressable
+                                    onPress={() => setIsPasswordHidden((v) => !v)}
+                                    accessibilityRole="button"
+                                    accessibilityLabel={isPasswordHidden ? 'Mostrar senha' : 'Ocultar senha'}
+                                    hitSlop={8}
+                                >
                                     <Ionicons
                                         name={isPasswordHidden ? 'eye-off' : 'eye'}
                                         size={28}
@@ -131,24 +145,31 @@ export default function SignUpScreen({ navigation }: any) {
                                 autoComplete="new-password"
                                 secureTextEntry={isPasswordHidden}
                                 placeholder="Repita sua senha..."
+                                placeholderTextColor={Colors.secondary800}
                                 value={confirmPassword}
                                 onChangeText={setConfirmPassword}
+                                accessibilityLabel="Confirmar senha"
                             />
                         </FormInput>
 
                         <Dash />
 
                         {/* Seleção de perfil */}
-                        <Text style={styles.roleLabel}>Você é:</Text>
-                        <View style={styles.roleContainer}>
+                        <Text style={styles.roleLabel} accessibilityRole="header">Você é:</Text>
+                        <View style={styles.roleContainer} accessibilityRole="radiogroup">
                             <Pressable
                                 style={[styles.roleButton, role === 'buyer' && styles.roleSelected]}
                                 onPress={() => setRole('buyer')}
+                                accessibilityRole="radio"
+                                accessibilityState={{ selected: role === 'buyer' }}
+                                accessibilityLabel="Comprador"
                             >
                                 <Ionicons
                                     name="basket-outline"
                                     size={22}
                                     color={role === 'buyer' ? Colors.lightText : Colors.primary500}
+                                    accessibilityElementsHidden
+                                    importantForAccessibility="no"
                                 />
                                 <Text
                                     style={[
@@ -166,11 +187,16 @@ export default function SignUpScreen({ navigation }: any) {
                                     role === 'producer' && styles.roleSelected,
                                 ]}
                                 onPress={() => setRole('producer')}
+                                accessibilityRole="radio"
+                                accessibilityState={{ selected: role === 'producer' }}
+                                accessibilityLabel="Produtor"
                             >
                                 <Ionicons
                                     name="egg-outline"
                                     size={22}
                                     color={role === 'producer' ? Colors.lightText : Colors.primary500}
+                                    accessibilityElementsHidden
+                                    importantForAccessibility="no"
                                 />
                                 <Text
                                     style={[
@@ -184,13 +210,23 @@ export default function SignUpScreen({ navigation }: any) {
                         </View>
 
                         {(validationError || error) ? (
-                            <Text style={styles.errorText}>{validationError || error}</Text>
+                            <Text
+                                style={styles.errorText}
+                                accessibilityLiveRegion="polite"
+                                accessibilityRole="alert"
+                            >
+                                {validationError || error}
+                            </Text>
                         ) : null}
 
                         <Dash />
 
                         {isLoading ? (
-                            <ActivityIndicator size="large" color={Colors.primary500} />
+                            <ActivityIndicator
+                                size="large"
+                                color={Colors.primary500}
+                                accessibilityLabel="Cadastrando"
+                            />
                         ) : (
                             <Button onPress={onSignUpHandler}>Cadastrar</Button>
                         )}

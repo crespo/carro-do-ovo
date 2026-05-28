@@ -13,6 +13,8 @@ export default function EggItem({ id, name, vendor, vendorRating, price, imageUr
         });
     }
 
+    const a11yLabel = `${name}, vendedor ${vendor}, avaliação ${vendorRating} de 5, R$ ${price.toFixed(2)} por bandeja`;
+
     return (
         <View
             style={[
@@ -26,9 +28,18 @@ export default function EggItem({ id, name, vendor, vendorRating, price, imageUr
                 },
             ]}
         >
-            <PressableCard onPress={selectEggHandler}>
+            <PressableCard
+                onPress={selectEggHandler}
+                accessibilityLabel={a11yLabel}
+                accessibilityHint="Abre os detalhes do produto"
+            >
                 <View style={styles.innerContainer}>
-                    <Image source={{ uri: imageUrl }} style={styles.image} />
+                    <Image
+                        source={{ uri: imageUrl }}
+                        style={styles.image}
+                        accessibilityElementsHidden
+                        importantForAccessibility="no"
+                    />
                     <View style={styles.subContainer}>
                         <Text style={styles.color}>
                             <Text style={styles.price}>R$ {price.toFixed(2)}</Text> / bandeja

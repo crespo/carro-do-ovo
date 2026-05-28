@@ -1,10 +1,18 @@
 import { Colors } from '@/constants/colors';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-export default function Button({ children, onPress, color }: any) {
+export default function Button({ children, onPress, color, accessibilityLabel, disabled }: any) {
+    const label =
+        accessibilityLabel ??
+        (typeof children === 'string' ? children : undefined);
+
     return (
         <Pressable
             onPress={onPress}
+            disabled={disabled}
+            accessibilityRole="button"
+            accessibilityLabel={label}
+            accessibilityState={{ disabled: !!disabled }}
             style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}
         >
             <View
@@ -51,7 +59,8 @@ const styles = StyleSheet.create({
     },
     titlePrimary: {
         fontFamily: 'fredoka',
-        color: Colors.lightText,
+        // a11y: era lightText sobre primaryAccent500 = 1.72:1 (falha AA). darkText agora = 6.04:1.
+        color: Colors.darkText,
         fontSize: 24,
         letterSpacing: 1,
     },

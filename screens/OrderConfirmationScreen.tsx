@@ -11,28 +11,52 @@ export default function OrderConfirmationScreen({ route, navigation }: any) {
         // ScrollView with flexGrow: 1 so content centers on large screens
         // and scrolls gracefully on small ones
         <ScrollView contentContainerStyle={styles.root}>
-            <View style={styles.iconCircle}>
-                <Ionicons name="checkmark" size={64} color={Colors.lightText} />
+            <View
+                style={styles.iconCircle}
+                accessible
+                accessibilityRole="image"
+                accessibilityLabel="Pedido confirmado com sucesso"
+            >
+                <Ionicons
+                    name="checkmark"
+                    size={64}
+                    color={Colors.lightText}
+                    accessibilityElementsHidden
+                    importantForAccessibility="no"
+                />
             </View>
 
-            <Text style={styles.title}>Pedido Confirmado!</Text>
-            <Text style={styles.orderNumber}>{orderNumber}</Text>
+            <Text style={styles.title} accessibilityRole="header">Pedido Confirmado!</Text>
+            <Text style={styles.orderNumber} accessibilityLabel={`Número do pedido ${orderNumber}`}>{orderNumber}</Text>
 
             <Text style={styles.body}>
                 Seu pedido foi recebido e está sendo preparado.{'\n'}
                 Em breve você receberá uma atualização.
             </Text>
 
-            <View style={styles.totalBox}>
+            <View style={styles.totalBox} accessible accessibilityLabel={`Total pago R$ ${total.toFixed(2)}`}>
                 <Text style={styles.totalLabel}>Total pago</Text>
                 <Text style={styles.totalValue}>R$ {total.toFixed(2)}</Text>
             </View>
 
             <View style={styles.stepRow}>
                 {['Recebido', 'Em preparo', 'Enviado', 'Entregue'].map((step, i) => (
-                    <View key={step} style={styles.step}>
+                    <View
+                        key={step}
+                        style={styles.step}
+                        accessible
+                        accessibilityLabel={`Etapa ${step}${i === 0 ? ', atual' : ', pendente'}`}
+                    >
                         <View style={[styles.stepDot, i === 0 && styles.stepDotActive]}>
-                            {i === 0 && <Ionicons name="checkmark" size={12} color={Colors.lightText} />}
+                            {i === 0 && (
+                                <Ionicons
+                                    name="checkmark"
+                                    size={12}
+                                    color={Colors.lightText}
+                                    accessibilityElementsHidden
+                                    importantForAccessibility="no"
+                                />
+                            )}
                         </View>
                         <Text style={styles.stepLabel}>{step}</Text>
                     </View>
@@ -40,7 +64,13 @@ export default function OrderConfirmationScreen({ route, navigation }: any) {
             </View>
 
             <View style={styles.notice}>
-                <Ionicons name="information-circle-outline" size={16} color={Colors.secondary800} />
+                <Ionicons
+                    name="information-circle-outline"
+                    size={16}
+                    color={Colors.secondary800}
+                    accessibilityElementsHidden
+                    importantForAccessibility="no"
+                />
                 <Text style={styles.noticeText}>
                     Acompanhamento em tempo real será disponibilizado em breve.
                 </Text>
