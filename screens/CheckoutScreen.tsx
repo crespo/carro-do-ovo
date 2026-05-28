@@ -1,6 +1,7 @@
 import Button from '@/components/Button';
 import { Colors } from '@/constants/colors';
 import { useCart } from '@/context/CartContext';
+import { useOrders } from '@/context/OrdersContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
@@ -16,6 +17,8 @@ import {
 } from 'react-native';
 
 type PaymentMethod = 'card' | 'pix' | 'boleto';
+
+const ORDER_NUMBER_LENGTH = 6;
 
 function SectionTitle({ children }: { children: string }) {
     return <Text style={styles.sectionTitle} accessibilityRole="header">{children}</Text>;
@@ -45,7 +48,8 @@ function formatExpiry(raw: string) {
 }
 
 export default function CheckoutScreen({ navigation }: any) {
-    const { totalPrice, totalItems, clearCart } = useCart();
+    const { items, totalPrice, totalItems, clearCart } = useCart();
+    const { createOrder } = useOrders();
 
     // Address
     const [street, setStreet] = useState('');
@@ -92,14 +96,32 @@ export default function CheckoutScreen({ navigation }: any) {
     async function handlePay() {
         if (!validate()) return;
         setIsLoading(true);
-        // Simulate payment processing delay
-        await new Promise((r) => setTimeout(r, 1500));
-        setIsLoading(false);
-        clearCart();
-        navigation.navigate('OrderConfirmation', {
-            orderNumber: `#${Math.floor(100000 + Math.random() * 900000)}`,
-            total: totalPrice,
-        });
+        try {
+            const orderId = await createOrder({
+                items: items.map((i) => ({
+                    eggId: i.egg.id,
+                    name: i.egg.name,
+                    price: i.egg.price,
+                    quantity: i.quantity,
+                    vendor: i.egg.vendor,
+                    producerId: i.egg.producerId,
+                    imageUrl: i.egg.imageUrl,
+                })),
+                total: totalPrice,
+                address: { street, number, neighborhood, city },
+                paymentMethod: method,
+            });
+            const orderNumber = `#${orderId.slice(-ORDER_NUMBER_LENGTH).toUpperCase()}`;
+            clearCart();
+            navigation.navigate('OrderConfirmation', {
+                orderNumber,
+                total: totalPrice,
+            });
+        } catch (err) {
+            Alert.alert('Erro', (err as Error).message);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     const paymentMethods: { key: PaymentMethod; label: string; icon: any; available: boolean }[] = [

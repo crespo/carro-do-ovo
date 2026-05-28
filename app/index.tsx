@@ -1,16 +1,19 @@
 import { Colors } from '@/constants/colors';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { CartProvider, useCart } from '@/context/CartContext';
+import { OrdersProvider } from '@/context/OrdersContext';
 import { StoreProvider } from '@/context/StoreContext';
 import CartScreen from '@/screens/CartScreen';
 import CheckoutScreen from '@/screens/CheckoutScreen';
 import EggDetailScreen from '@/screens/EggDetailScreen';
 import LoginScreen from '@/screens/LoginScreen';
+import MyOrdersScreen from '@/screens/MyOrdersScreen';
 import OrderConfirmationScreen from '@/screens/OrderConfirmationScreen';
 import SelectEggsScreen from '@/screens/SelectEggsScreen';
 import SignUpScreen from '@/screens/SignUpScreen';
 import CreateListingScreen from '@/screens/producer/CreateListingScreen';
 import ProducerDashboardScreen from '@/screens/producer/ProducerDashboardScreen';
+import ReceivedOrdersScreen from '@/screens/producer/ReceivedOrdersScreen';
 import { Ionicons } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
@@ -20,6 +23,19 @@ import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
+
+function OrdersIcon({ navigation, target }: { navigation: any; target: 'MyOrders' | 'ReceivedOrders' }) {
+    return (
+        <Pressable
+            onPress={() => navigation.navigate(target)}
+            hitSlop={12}
+            accessibilityRole="button"
+            accessibilityLabel={target === 'MyOrders' ? 'Meus pedidos' : 'Pedidos recebidos'}
+        >
+            <Ionicons name="receipt-outline" size={24} color={Colors.lightText} />
+        </Pressable>
+    );
+}
 
 function CartIcon({ navigation }: { navigation: any }) {
     const { totalItems } = useCart();
@@ -103,14 +119,24 @@ function AppNavigator() {
                     <Stack.Screen
                         name="Home"
                         component={ProducerDashboardScreen}
-                        options={{
+                        options={({ navigation }: any) => ({
                             headerBackVisible: false,
-                            headerRight: () => logoutBtn,
-                        }}
+                            headerRight: () => (
+                                <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+                                    <OrdersIcon navigation={navigation} target="ReceivedOrders" />
+                                    {logoutBtn}
+                                </View>
+                            ),
+                        })}
                     />
                     <Stack.Screen
                         name="CreateListing"
                         component={CreateListingScreen}
+                    />
+                    <Stack.Screen
+                        name="ReceivedOrders"
+                        component={ReceivedOrdersScreen}
+                        options={{ title: 'Pedidos Recebidos' }}
                     />
                 </>
             ) : (
@@ -124,6 +150,7 @@ function AppNavigator() {
                             headerBackVisible: false,
                             headerRight: () => (
                                 <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+                                    <OrdersIcon navigation={navigation} target="MyOrders" />
                                     <CartIcon navigation={navigation} />
                                     {logoutBtn}
                                 </View>
@@ -152,6 +179,11 @@ function AppNavigator() {
                         component={OrderConfirmationScreen}
                         options={{ title: 'Pedido Confirmado', headerBackVisible: false }}
                     />
+                    <Stack.Screen
+                        name="MyOrders"
+                        component={MyOrdersScreen}
+                        options={{ title: 'Meus Pedidos' }}
+                    />
                 </>
             )}
         </Stack.Navigator>
@@ -177,9 +209,11 @@ export default function Index() {
     return (
         <AuthProvider>
             <StoreProvider>
-                <CartProvider>
-                    <AppNavigator />
-                </CartProvider>
+                <OrdersProvider>
+                    <CartProvider>
+                        <AppNavigator />
+                    </CartProvider>
+                </OrdersProvider>
             </StoreProvider>
         </AuthProvider>
     );

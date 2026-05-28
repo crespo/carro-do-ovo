@@ -1,7 +1,7 @@
 import Button from '@/components/Button';
 import { Colors } from '@/constants/colors';
 import { Ionicons } from '@expo/vector-icons';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function OrderConfirmationScreen({ route, navigation }: any) {
     const orderNumber: string = route.params?.orderNumber ?? '#000000';
@@ -79,6 +79,15 @@ export default function OrderConfirmationScreen({ route, navigation }: any) {
             <Button onPress={() => navigation.navigate('Home')}>
                 Continuar Comprando
             </Button>
+
+            <Pressable
+                onPress={() => navigation.replace('MyOrders')}
+                style={styles.secondaryBtn}
+                accessibilityRole="button"
+                accessibilityLabel="Ver meus pedidos"
+            >
+                <Text style={styles.secondaryBtnText}>Ver meus pedidos</Text>
+            </Pressable>
         </ScrollView>
     );
 }
@@ -190,5 +199,15 @@ const styles = StyleSheet.create({
         color: Colors.secondary800,
         flex: 1,
         lineHeight: 16,
+    },
+    secondaryBtn: {
+        alignItems: 'center',
+        paddingVertical: 6,
+    },
+    secondaryBtnText: {
+        fontFamily: 'inter',
+        fontSize: 13,
+        color: Colors.primary500,
+        textDecorationLine: 'underline',
     },
 });
